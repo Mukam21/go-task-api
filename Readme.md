@@ -1,4 +1,4 @@
-Task Management REST API
+## Task Management REST API
 
 Проект реализует REST API для управления задачами на Go с асинхронным логированием и in-memory хранилищем. Ниже представлены инструкции по запуску и тестированию API с помощью Postman.
 
@@ -14,7 +14,7 @@ Task Management REST API
 
 5. Фильтрация задач по статусу
 
-Запуск приложения
+# Запуск приложения
 
 1. Убедитесь, что установлен Go (версия 1.20+)
 
@@ -27,7 +27,7 @@ Task Management REST API
 3. Запустите сервер:
     go run cmd/main.go
 
-Сервер запустится на порту 8080:
+# Сервер запустится на порту 8080:
     2025/08/14 12:00:00 Server is running on :8080
 
 2. Создание задачи (POST /tasks)
@@ -93,7 +93,7 @@ Task Management REST API
 
 Примеры запросов
 
-Успешное создание задачи
+# Успешное создание задачи
 
     POST /tasks HTTP/1.1
     Host: localhost:8080
@@ -153,7 +153,7 @@ Graceful Shutdown
     2025/08/14 12:15:00 Shutting down...
     2025/08/14 12:15:00 Server stopped gracefully
 
-Технические детали реализации
+# Технические детали реализации
 
  - Асинхронное логирование
 
@@ -199,16 +199,16 @@ Graceful Shutdown
 
  - Graceful Shutdown
 
-    stop := make(chan os.Signal, 1)
+        stop := make(chan os.Signal, 1)
 
-    signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+        signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-    <-stop
+        <-stop
 
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
-    defer cancel()
-    
-    srv.Shutdown(ctx)
+        defer cancel()
 
-    asyncLogger.Close()
+        srv.Shutdown(ctx)
+
+        asyncLogger.Close()
