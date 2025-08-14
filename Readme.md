@@ -21,6 +21,7 @@ Task Management REST API
 2. Склонируйте репозиторий:
 
     git clone https://github.com/yourusername/go-task-api.git
+
     cd go-task-api
 
 3. Запустите сервер:
@@ -157,36 +158,57 @@ Graceful Shutdown
  - Асинхронное логирование
 
     func (l *Logger) Start() {
+
         l.wg.Add(1)
+
         go func() {
+
             defer l.wg.Done()
+
             for msg := range l.ch {
+
                 log.Printf("%s %s", time.Now().UTC().Format(time.RFC3339), msg)
+
             }
+
         }()
+
     }
 
  - Потокобезопасное хранилище
 
     func (r *TaskRepository) Create(task *model.Task) *model.Task {
+
         r.mu.Lock()
+
         defer r.mu.Unlock()
+
         r.lastID++
+
         task.ID = r.lastID
+
         task.CreatedAt = time.Now().UTC()
+
         task.UpdatedAt = task.CreatedAt
+
         r.tasks[task.ID] = task
+
         return task
+
     }
 
  - Graceful Shutdown
 
     stop := make(chan os.Signal, 1)
-signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
+    signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
     <-stop
 
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
     defer cancel()
+    
     srv.Shutdown(ctx)
 
     asyncLogger.Close()
